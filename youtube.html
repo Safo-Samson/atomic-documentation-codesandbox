@@ -43,34 +43,8 @@ display: flex;
       <atomic-layout-section section="search">
         <atomic-search-box></atomic-search-box>
       </atomic-layout-section>
-<!-- A facet component will allow queries to be refined with metadata filters -->
-      <!-- <atomic-layout-section section="facets">
-            <atomic-facet-manager> 
-               <atomic-facet
-                field="source"
-                label="Source"
-                ></atomic-facet> 
-                <atomic-facet
-                field="language"
-                label="Language"
-                ></atomic-facet> 
-
-                <atomic-timeframe-facet
-                label="Timeframe"
-                with-date-picker="true"
-                is-collapsed="true"
-                > 
-    
-
-                <atomic-timeframe unit="year"></atomic-timeframe>
-                </atomic-timeframe-facet>
-            </atomic-facet-manager>
-        </atomic-layout-section> -->
 
         <atomic-layout-section section="main">
-            <!-- <atomic-layout-section section="status">
-                <atomic-refine-toggle></atomic-refine-toggle>
-            </atomic-layout-section> -->
             <atomic-layout-section section="results">
             <atomic-result-list
               display="grid"
@@ -80,8 +54,7 @@ display: flex;
             >
               <atomic-result-template>
                 <template>
-                    <!-- ** Add the code from the Visual Result Section here ** -->
-
+                    <!-- ** Add the code from the Visual Result Section here -- this gives the video icon** -->
                     <atomic-result-section-visual>
                         <atomic-result-icon></atomic-result-icon> 
                     </atomic-result-section-visual>
@@ -92,7 +65,6 @@ display: flex;
                         <atomic-field-condition must-match-sourcetype="YouTube"> 
                             <atomic-result-badge if-defined="featured" label="featured"></atomic-result-badge>
                             <atomic-result-badge if-defined="top result" label="top result"></atomic-result-badge>
-                            <!-- <atomic-result-badge label="YouTube"></atomic-result-badge> -->
                             <atomic-field-condition if-defined="date"> 
                               <atomic-result-date></atomic-result-date>
                             </atomic-field-condition>
@@ -130,13 +102,11 @@ display: flex;
                                         <atomic-result-printable-uri></atomic-result-printable-uri>
                                     </div>  
                                 </atomic-field-condition>
-                        <atomic-field-condition if-defined="ytvideoduration">
-                            <div>
-                                <atomic-result-printable-uri></atomic-result-printable-uri>
-                            </div>
-                             
-                        </atomic-field-condition>
-
+                                <atomic-field-condition if-defined="ytvideoduration">
+                                    <div>
+                                        <atomic-result-printable-uri></atomic-result-printable-uri>
+                                    </div>
+                                </atomic-field-condition>
                             </atomic-result-fields-list>
                         </atomic-result-section-bottom-metadata>
                   <atomic-result-section-title>

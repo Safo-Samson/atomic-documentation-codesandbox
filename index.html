@@ -161,6 +161,8 @@
             <atomic-color-facet field="filetype" label="Files" number-of-values="6" sort-criteria="occurrences"></atomic-color-facet>
           </atomic-facet-manager>
         </atomic-layout-section>
+
+
         <atomic-layout-section section="main">
           <atomic-layout-section section="status">
             <atomic-breadbox></atomic-breadbox>
@@ -225,6 +227,8 @@
                     <atomic-result-icon class="icon"></atomic-result-icon>
                     <img src="https://picsum.photos/350" class="thumbnail">
                   </atomic-result-section-visual>
+
+                  <!-- atomic result section badges -->
                   <atomic-result-section-badges>
                     <atomic-field-condition must-match-sourcetype="Salesforce">
                       <atomic-result-badge label="Salesforce" class="salesforce-badge"></atomic-result-badge>
@@ -247,6 +251,7 @@
                     </atomic-field-condition>
                   </atomic-result-section-title-metadata>
                   <atomic-result-section-excerpt><atomic-result-text field="excerpt"></atomic-result-text></atomic-result-section-excerpt>
+                  <!-- bottom metadata -->
                   <atomic-result-section-bottom-metadata>
                     <atomic-result-fields-list>
                       <atomic-field-condition class="field" if-defined="author">
@@ -282,6 +287,7 @@
                       </span>
                     </atomic-result-fields-list>
                   </atomic-result-section-bottom-metadata>
+                  
                   <atomic-table-element label="Description">
                     <atomic-result-link field="title"></atomic-result-link>
                     <atomic-result-text field="excerpt"></atomic-result-text>
