@@ -279,7 +279,35 @@
         <!-- TODO: Task #1 -->
         <atomic-result-template must-match-sourcetype="YouTube">
                 <template>
-                    <!-- ** The Visual Result Section -- this gives the video icon** -->
+                  <style>
+                    /*** from the documentation I read, "...the section helps create template that works well on desktop and mobile, there was
+                      hardly the need for to me to add any media query for mobile responsiveness as it was already responsive when i tested"
+                     ***/
+                  
+                    .field-label {
+                      font-weight: bold;
+                      margin-right: 0.25rem;
+                    }
+
+                    /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
+                    .excerpt-result-section {
+                          display: flex;
+                      }
+
+                    .excerpt-text {
+                        flex: 8; /* Take 80% of the space */
+                        margin-right: 0.95rem;
+                    }
+
+                  .excerpt-image {
+                      flex: 2; /* Take the remaining 20% of the space */
+                      height: 100%; 
+                      width: 100%;
+                     object-fit: contain;
+                  }
+                </style>
+
+                    <!-- ** The Visual Result Section -- this gives the video icon ** -->
                     <atomic-result-section-visual>
                         <atomic-result-icon></atomic-result-icon> 
                     </atomic-result-section-visual>
@@ -290,27 +318,34 @@
                         <atomic-field-condition> 
                             <atomic-result-badge if-defined="featured" label="featured"></atomic-result-badge>
                             <atomic-result-badge if-defined="top result" label="top result"></atomic-result-badge>
+                        </atomic-field-condition>                       
+                    </atomic-result-section-badges>
+
+                     <!-- ** The Action Result Section for date ** -->
+                    <atomic-result-section-actions>
                             <atomic-field-condition if-defined="date"> 
                               <atomic-result-date></atomic-result-date>
                             </atomic-field-condition>
-                        </atomic-field-condition>
-                                              
-                    </atomic-result-section-badges>
+                    </atomic-result-section-actions>
 
-                
-                    <!-- ** The Excerpt Result Section ** -->
-                    <atomic-result-section-excerpt>
-                        <atomic-result-text field="excerpt"></atomic-result-text>
-                        <!-- Add thumbnail image -->
-                    </atomic-result-section-excerpt>
+                     <!-- ** The Result Title Section ** -->
+                  <atomic-result-section-title>
+                    <atomic-result-link target="_blank"></atomic-result-link>
+                  </atomic-result-section-title>
 
+                  <!-- ** Excerpt Result Section - styled to contain the excerpt and image thumbnail as per question** -->
+                      <atomic-result-section-excerpt>
+                          <div class="excerpt-result-section">
+                            <atomic-result-text field="excerpt" class="excerpt-text"></atomic-result-text>
+                            <atomic-result-image class="excerpt-image" field="ytthumbnailurl"></atomic-result-image>                            
+                          </div>
+                      </atomic-result-section-excerpt> 
 
                     <!-- ** The Bottom Metadata Result Section ** -->
                         <atomic-result-section-bottom-metadata>
                             <atomic-result-fields-list> 
-                                <atomic-field-condition class="field" if-defined="ytvideoduration">
-                                    <!-- <span class="field-label" >Length:</span>  -->
-                                    <span class="field-label"><atomic-text value="Length"></atomic-text>:</span>
+                                <atomic-field-condition if-defined="ytvideoduration">
+                                    <span class="field-label"><atomic-text value="Length"></atomic-text> : </span>
                                     <atomic-result-timespan field="ytvideoduration" unit="s"></atomic-result-timespan> 
                                     <div>
                                         <atomic-result-printable-uri></atomic-result-printable-uri>
@@ -318,13 +353,11 @@
                                 </atomic-field-condition>
                             </atomic-result-fields-list>
                         </atomic-result-section-bottom-metadata>
-                  <atomic-result-section-title>
-                    <atomic-result-link target="_blank"></atomic-result-link>
-                  </atomic-result-section-title>
+
                   
                 </template>
         </atomic-result-template>
-
+          <!-- End of Task #1 -->
         <atomic-result-template>
           <template>
             <style>

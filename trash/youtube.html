@@ -47,13 +47,33 @@ display: flex;
         <atomic-layout-section section="main">
             <atomic-layout-section section="results">
             <atomic-result-list
-              display="grid"
+              display="list"
               image-size="icon"
               density="compact"
               fields-to-include="ytlikecount,ytviewcount,ytthumbnailurl,ytviewrating,ytvideoduration" 
             >
               <atomic-result-template>
                 <template>
+                   <style>
+                    .field-label {
+                      font-weight: bold;
+                      margin-right: 0.25rem;
+                    }
+                    .excerpt-result-section {
+                        display: flex;
+                       
+                    }
+
+                   .excerpt-text {
+                      flex: 1; /* Take remaining space */
+                   }
+
+                  .excerpt-image {
+                      width: 100px; /* Set width */
+                      height: 100px; /* Set height */
+                  }
+         
+                </style>
                     <!-- ** Add the code from the Visual Result Section here -- this gives the video icon** -->
                     <atomic-result-section-visual>
                         <atomic-result-icon></atomic-result-icon> 
@@ -74,13 +94,16 @@ display: flex;
 
                 
                     <!-- ** Add the code from the Excerpt Result Section here ** -->
-                    <atomic-result-section-excerpt>
-                        <atomic-result-text field="excerpt"></atomic-result-text>
-                        <!-- Add thumbnail image here -->
-                    </atomic-result-section-excerpt>
+                    <atomic-result-section class="excerpt-result-section">
+                      <atomic-result-section-excerpt class="excerpt-text">
+                          <atomic-result-text field="excerpt"></atomic-result-text>
+                      </atomic-result-section-excerpt>
+                      
+                      <atomic-result-image class="excerpt-image" field="ytthumbnailurl"></atomic-result-image>
+                  </atomic-result-section>
 
                    
-                    <atomic-result-image field="ytthumbnailurl"></atomic-result-image>
+                    <!-- <atomic-result-image field="ytthumbnailurl"></atomic-result-image> -->
                     
                 
 
