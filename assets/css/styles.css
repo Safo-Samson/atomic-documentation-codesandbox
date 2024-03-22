@@ -1,0 +1,260 @@
+  /* Example on how to customize the color facet */
+    atomic-color-facet::part(value-dynamicscrmitem) {
+      background-image: url('/build/assets/email.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: rgb(149, 174, 197);
+    }
+
+    atomic-color-facet::part(value-lithiumuser) {
+      background-image: url('/build/assets/folder.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: rgb(139, 154, 227);
+    }
+
+    atomic-color-facet::part(value-YouTubeVideo) {
+      background-image: url('build/assets/video.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: rgb(176, 112, 230);
+    }
+
+    atomic-color-facet::part(value-lithiummessage) {
+      background-image: url('build/assets/knowledge.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: rgb(236, 148, 237);
+    }
+
+    atomic-color-facet::part(value-lithiumthread) {
+      background-image: url('build/assets/post.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: rgb(101, 202, 228);
+    }
+
+    atomic-color-facet::part(value-html) {
+      background-image: url('build/assets/html.svg');
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: transparent;
+    }
+
+    /* Example of generic layout styling, mobile-first  */
+    :root {
+      --spacing: 16px;
+      --spacing-col: 32px;
+      --search-box-width: 648px;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    body.atomic-modal-opened {
+      overflow-y: hidden;
+    }
+
+    atomic-search-interface {
+      display: grid;
+      grid-template-columns: var(--spacing) 1fr var(--spacing);
+      grid-template-areas:
+        '. search      .'
+        '. status      .'
+        '. breadbox    .'
+        '. topbar      .'
+        '. results     .'
+        '. pagination  .'
+        '. .           .';
+    }
+
+    .header-bg {
+      background-color: var(--atomic-neutral-light);
+      grid-area: 1 / -1 / 1 / 1;
+    }
+
+    atomic-facet-manager {
+      display: none;
+    }
+
+    atomic-sort-dropdown {
+      display: none;
+    }
+
+    atomic-search-box {
+      grid-area: search;
+      margin: var(--spacing) 0;
+      max-width: var(--search-box-width);
+    }
+
+    .status {
+      grid-area: status;
+    }
+
+    atomic-facet-manager {
+      grid-area: facets;
+      margin-top: var(--spacing);
+    }
+
+    atomic-facet-manager>* {
+      margin-bottom: var(--spacing);
+    }
+
+    atomic-breadbox {
+      grid-area: breadbox;
+      margin-top: var(--spacing);
+      padding-bottom: var(--spacing);
+      border-bottom: 1px solid var(--atomic-neutral);
+    }
+
+    .topbar {
+      grid-area: topbar;
+      margin: var(--spacing) 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    atomic-did-you-mean {
+      margin-bottom: var(--spacing);
+    }
+
+    .results {
+      grid-area: results;
+    }
+
+    .pagination {
+      grid-area: pagination;
+      margin: var(--spacing) 0;
+    }
+
+    .atomic-search-interface-no-results .topbar,
+    .atomic-search-interface-no-results .results,
+    .atomic-search-interface-no-results .pagination {
+      display: none;
+    }
+
+    @media only screen and (min-width: 1024px) {
+      atomic-search-interface {
+        column-gap: var(--spacing-col);
+        grid-template-columns: 1fr minmax(150px, 325px) minmax(500px, 1100px) 1fr;
+        grid-template-areas:
+          '. .      search      .'
+          '. facets breadbox    .'
+          '. facets topbar      .'
+          '. facets results     .'
+          '. facets pagination  .'
+          '. facets status      .'
+          '. facets .           .';
+      }
+
+      atomic-facet-manager {
+        display: block;
+      }
+
+      atomic-refine-toggle {
+        display: none;
+      }
+
+      atomic-sort-dropdown {
+        display: block;
+      }
+
+      .status {
+        max-width: var(--search-box-width);
+      }
+
+      .this-year-button {
+        width: fit-content;
+        padding: 10px 10px 12px 10px;
+        border: 1px solid #1372ec;
+        border-radius: 10px;
+        font-family: var(--atomic-font-family);
+        position: absolute;
+        margin: var(--spacing);
+        right: 0;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .this-year-button:hover {
+        background: #e1e9f3;
+      }
+
+      .this-year-button.active {
+        background: #066bf0;
+        color: white;
+      }
+    }
+
+
+.field {
+display: inline-flex;
+align-items: center;
+}
+
+.field-label {
+ font-weight: bold;
+ margin-right: 0.25rem;
+ }
+
+.thumbnail {
+display: none;
+ width: 100%;
+height: 100%;
+ }
+
+ .icon {
+ display: none;
+}
+
+.result-root.image-small .thumbnail,
+.result-root.image-large .thumbnail {
+display: inline-block;
+ }
+
+.result-root.image-icon .icon {
+ display: inline-block;
+ }
+
+.result-root.image-small atomic-result-section-visual,
+ .result-root.image-large atomic-result-section-visual {
+  border-radius: var(--atomic-border-radius-xl);
+ }
+
+.salesforce-badge::part(result-badge-element) {
+ background-color: #44a1da;
+  color: white;
+}
+
+/*--------------------------------------------------------------
+# TMY STYLES FOR THE YOUTUBE TEMPLATE
+--------------------------------------------------------------*/
+  /*** 
+  from the documentation I read, "...the section helps create template that works well on desktop and mobile, there was
+  hardly the need for to me to add any media query for mobile responsiveness as it was already responsive when i tested"
+ ***/
+                  
+  /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
+.excerpt-result-section {
+    display: flex;
+ }
+
+.excerpt-text {
+    flex: 8; /* Take 80% of the space */
+    margin-right: 0.95rem;
+ }
+
+.excerpt-image {
+   flex: 2; /* Take the remaining 20% of the space */
+   height: 100%; 
+   width: 100%;
+   object-fit: contain;
+}
