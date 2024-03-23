@@ -12,7 +12,12 @@
     import {
       loadAdvancedSearchQueryActions,
       loadSearchActions,
-      loadSearchAnalyticsActions
+      loadSearchAnalyticsActions,
+
+      buildStaticFilter,
+      buildStaticFilterValue,
+      buildQueryExpression,
+
     } from 'https://static.cloud.coveo.com/atomic/v2/headless/headless.esm.js';
 
     let headlessEngine;
@@ -35,6 +40,34 @@
 
     function filterFor2022(e) {
       // TODO: Task #2
+      //building a query expression using advanced query
+      const queryExpression = buildQueryExpression().addStringField({
+        field: 'date',
+        operator: 'isExactly',
+        values: ['2022']
+      }).toQuerySyntax();
+
+      //building a query expression using advanced query
+         const advancedQuery = "@year==2022";
+
+       //building the static filter value for the static filter 
+      const staticFilterValue = buildStaticFilterValue({
+      caption:'Content for 2022', //caption for the static filter value
+      expression: queryExpression,
+    });
+
+      const staticFilter = buildStaticFilter(headlessEngine, {
+        id:"fileType", // id for static filter props, eg fileType
+        values: [staticFilterValue] //needs a static filter value  StaticFilterValue[]
+      })
+
+
+      // using the loadAdvancedSearchQueryActions to add the static filter to the search interface
+      const advancedSearchQueryActionCreators = loadAdvancedSearchQueryActions(headlessEngine);
+      const payloadDispatchableAction = advancedSearchQueryActionCreators.updateAdvancedSearchQueries(advancedQuery);
+      headlessEngine.dispatch(payloadDispatchableAction);
+      
+
     }
 
   </script>
@@ -262,6 +295,11 @@
       <atomic-rating-range-facet facet-id="snrating_range" field="snrating" label="Rating Range" number-of-intervals="5">
       </atomic-rating-range-facet>
       <atomic-color-facet field="filetype" label="Files" number-of-values="6" sort-criteria="occurrences"></atomic-color-facet>
+      
+      <!-- building a facet for date so i can filter for 2022 content -->
+      <atomic-timeframe-facet label="Timeframe" with-date-picker="true" max="31/12/2022" min="01/01/2022" > 
+      </atomic-timeframe-facet>
+
     </atomic-facet-manager>
     <atomic-breadbox></atomic-breadbox>
     <div class="topbar">
@@ -346,6 +384,7 @@
                             <atomic-result-fields-list> 
                                 <atomic-field-condition if-defined="ytvideoduration">
                                     <span class="field-label"><atomic-text value="Length"></atomic-text> : </span>
+                                    
                                     <atomic-result-timespan field="ytvideoduration" unit="s"></atomic-result-timespan> 
                                     <div>
                                         <atomic-result-printable-uri></atomic-result-printable-uri>

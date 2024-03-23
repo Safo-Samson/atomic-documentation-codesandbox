@@ -26,4 +26,37 @@ let headlessEngine;
 
 function filterFor2022(e) {
   // TODO: Task #2
+  // Create a new query to filter for 2022
+  // Execute the new query
+  // Hint: Use the headless engine to create a new query
+  // Hint: Use the headless engine to execute the new query
+  // Hint: Use the headless engine to execute the new query
+  const query = headlessEngine.state.query;
+  const newQuery = query.setFilter("date", "2022");
+  headlessEngine.dispatch(loadSearchActions.executeSearch(newQuery));
+
+  // Create an advanced query to filter for content from the year 2022
+  const advancedQuery = "@year==2022";
+
+  // Get the current state of the search interface
+  const state = headlessEngine.state;
+
+  // Apply the advanced query to the search state
+  const updatedState = loadAdvancedSearchQueryActions.applyAdvancedSearchQuery(
+    state,
+    advancedQuery
+  );
+
+  // Update the search state
+  headlessEngine.setState(updatedState);
+
+  // Log the appropriate analytics event (e.g., filter selection)
+  loadSearchAnalyticsActions.logSearchEvent(
+    headlessEngine,
+    "FilterFor2022",
+    "StaticFilterSelection"
+  );
+
+  // Execute the search with the updated state
+  loadSearchActions.executeSearch(headlessEngine);
 }
