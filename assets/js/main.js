@@ -2,6 +2,9 @@ import {
   loadAdvancedSearchQueryActions,
   loadSearchActions,
   loadSearchAnalyticsActions,
+  buildStaticFilter,
+  buildStaticFilterValue,
+  buildQueryExpression,
 } from "https://static.cloud.coveo.com/atomic/v2/headless/headless.esm.js";
 
 let headlessEngine;
@@ -26,37 +29,38 @@ let headlessEngine;
 
 function filterFor2022(e) {
   // TODO: Task #2
-  // Create a new query to filter for 2022
-  // Execute the new query
-  // Hint: Use the headless engine to create a new query
-  // Hint: Use the headless engine to execute the new query
-  // Hint: Use the headless engine to execute the new query
-  const query = headlessEngine.state.query;
-  const newQuery = query.setFilter("date", "2022");
-  headlessEngine.dispatch(loadSearchActions.executeSearch(newQuery));
 
-  // Create an advanced query to filter for content from the year 2022
+  //building a query expression using advanced query
+  const queryExpression = buildQueryExpression()
+    .addStringField({
+      field: "year",
+      operator: "isExactly",
+      values: ["2022"],
+    })
+    .toQuerySyntax();
+
+  //building a query expression using advanced query
   const advancedQuery = "@year==2022";
 
-  // Get the current state of the search interface
-  const state = headlessEngine.state;
+  //building the static filter value for the static filter
+  const staticFilterValue = buildStaticFilterValue({
+    caption: "Content for 2022", //caption for the static filter value
+    expression: queryExpression,
+  });
 
-  // Apply the advanced query to the search state
-  const updatedState = loadAdvancedSearchQueryActions.applyAdvancedSearchQuery(
-    state,
-    advancedQuery
-  );
+  const staticFilter = buildStaticFilter(headlessEngine, {
+    id: "year", // id for static filter props, eg fileType
+    values: [staticFilterValue], //needs a static filter value  StaticFilterValue[]
+  });
 
-  // Update the search state
-  headlessEngine.setState(updatedState);
+  staticFilter.toggleSelect("2022");
 
-  // Log the appropriate analytics event (e.g., filter selection)
-  loadSearchAnalyticsActions.logSearchEvent(
-    headlessEngine,
-    "FilterFor2022",
-    "StaticFilterSelection"
-  );
-
-  // Execute the search with the updated state
-  loadSearchActions.executeSearch(headlessEngine);
+  // using the loadAdvancedSearchQueryActions to add the static filter to the search interface
+  const advancedSearchQueryActionCreators =
+    loadAdvancedSearchQueryActions(headlessEngine);
+  const payloadDispatchableAction =
+    advancedSearchQueryActionCreators.updateAdvancedSearchQueries(
+      advancedQuery
+    );
+  headlessEngine.dispatch(payloadDispatchableAction);
 }

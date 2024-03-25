@@ -243,18 +243,41 @@ display: inline-block;
  ***/
                   
   /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
-.excerpt-result-section {
-    display: flex;
- }
+                  
+                    .field-label {
+                      font-weight: bold;
+                      margin-right: 0.25rem;
+                    }
 
-.excerpt-text {
-    flex: 8; /* Take 80% of the space */
-    margin-right: 0.95rem;
- }
+                    /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
+                    .excerpt-result-section {
+                          display: flex;
+                      }
 
-.excerpt-image {
-   flex: 2; /* Take the remaining 20% of the space */
-   height: 100%; 
-   width: 100%;
-   object-fit: contain;
-}
+                    .excerpt-text {
+                        flex: 8; /* Take 80% of the space */
+                        margin-right: 0.95rem;
+                    }
+
+                  .excerpt-image {
+                      flex: 2; /* Take the remaining 20% of the space */
+                      height: 100%; 
+                      width: 100%;
+                     object-fit: contain;
+                  }
+
+                    #featured-result::part(result-badge-element) {
+                      background-color:black;
+                      color: white;
+                    }
+
+                    #top-result::part(result-badge-element) {
+                      background-color:white;
+                      color: black;
+                      border: 1px solid black;
+                    }
+
+                    #date-result { 
+                      color: rgb(5, 1, 1);
+                      font-weight: 500;
+                    }
