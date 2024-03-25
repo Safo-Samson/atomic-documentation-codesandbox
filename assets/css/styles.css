@@ -1,4 +1,4 @@
-  /* Example on how to customize the color facet */
+    /* Example on how to customize the color facet */
     atomic-color-facet::part(value-dynamicscrmitem) {
       background-image: url('/build/assets/email.svg');
       background-position: center;
@@ -46,6 +46,7 @@
       background-repeat: no-repeat;
       background-color: transparent;
     }
+
 
     /* Example of generic layout styling, mobile-first  */
     :root {
@@ -182,6 +183,7 @@
         right: 0;
         cursor: pointer;
         user-select: none;
+        
       }
 
       .this-year-button:hover {
@@ -194,90 +196,24 @@
       }
     }
 
+    /* The styling I had to handle for the filter button to show on all screens  */
+    @media only screen and (max-width:1014px) {
+    .this-year-button {
+      border: 1px solid #1372ec;
+      border-radius: 10px;
+      margin: 10px 10px 10px -100px; /* negative margin to move the button to the left */
+      text-align: center; 
+      padding: 10px; 
+      user-select: none;
+    }
 
-.field {
-display: inline-flex;
-align-items: center;
-}
+    .this-year-button:hover {
+      background: #e1e9f3;
+      }
 
-.field-label {
- font-weight: bold;
- margin-right: 0.25rem;
- }
+    .this-year-button.active {
+        background: #066bf0;
+        color: white;
+      }
 
-.thumbnail {
-display: none;
- width: 100%;
-height: 100%;
- }
-
- .icon {
- display: none;
-}
-
-.result-root.image-small .thumbnail,
-.result-root.image-large .thumbnail {
-display: inline-block;
- }
-
-.result-root.image-icon .icon {
- display: inline-block;
- }
-
-.result-root.image-small atomic-result-section-visual,
- .result-root.image-large atomic-result-section-visual {
-  border-radius: var(--atomic-border-radius-xl);
- }
-
-.salesforce-badge::part(result-badge-element) {
- background-color: #44a1da;
-  color: white;
-}
-
-/*--------------------------------------------------------------
-# TMY STYLES FOR THE YOUTUBE TEMPLATE
---------------------------------------------------------------*/
-  /*** 
-  from the documentation I read, "...the section helps create template that works well on desktop and mobile, there was
-  hardly the need for to me to add any media query for mobile responsiveness as it was already responsive when i tested"
- ***/
-                  
-  /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
-                  
-                    .field-label {
-                      font-weight: bold;
-                      margin-right: 0.25rem;
-                    }
-
-                    /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
-                    .excerpt-result-section {
-                          display: flex;
-                      }
-
-                    .excerpt-text {
-                        flex: 8; /* Take 80% of the space */
-                        margin-right: 0.95rem;
-                    }
-
-                  .excerpt-image {
-                      flex: 2; /* Take the remaining 20% of the space */
-                      height: 100%; 
-                      width: 100%;
-                     object-fit: contain;
-                  }
-
-                    #featured-result::part(result-badge-element) {
-                      background-color:black;
-                      color: white;
-                    }
-
-                    #top-result::part(result-badge-element) {
-                      background-color:white;
-                      color: black;
-                      border: 1px solid black;
-                    }
-
-                    #date-result { 
-                      color: rgb(5, 1, 1);
-                      font-weight: 500;
-                    }
+  }

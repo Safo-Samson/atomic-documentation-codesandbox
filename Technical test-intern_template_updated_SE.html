@@ -8,319 +8,10 @@
 
   <script type="module" src="https://static.cloud.coveo.com/atomic/v2/atomic.esm.js"></script>
   <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v2/themes/coveo.css"/>
-  <script type="module">
-    import {
-      loadAdvancedSearchQueryActions,
-      loadSearchActions,
-      loadSearchAnalyticsActions,
-
-      buildStaticFilter,
-      buildStaticFilterValue,
-      buildQueryExpression,
-
-    } from 'https://static.cloud.coveo.com/atomic/v2/headless/headless.esm.js';
-
-    let headlessEngine;
-    (async () => {
-      await customElements.whenDefined('atomic-search-interface');
-      const searchInterface = document.querySelector('atomic-search-interface');
-
-      searchInterface.querySelector('.this-year-button').addEventListener('click', filterFor2022);
-
-      // Initialization
-      await searchInterface.initialize({
-        accessToken: 'xx564559b1-0045-48e1-953c-3addd1ee4457',
-        organizationId: 'searchuisamples'
-      });
-      
-      headlessEngine = searchInterface.engine;
-      // Trigger a first search
-      searchInterface.executeFirstSearch();
-    })();
-
-    function filterFor2022(e) {
-      // TODO: Task #2
-
-      //building a query expression using advanced query
-      const advancedQuery = "@year==2022";
-
-      // loading all the actions needed to execute the search and log the events using the headless engine
-      const advancedSearchQueryActionCreators = loadAdvancedSearchQueryActions(headlessEngine);
-      const searchActionCreators = loadSearchActions(headlessEngine);
-      const searchAnalyticsActionCreators = loadSearchAnalyticsActions(headlessEngine); 
-
-      // using the loadAdvancedSearchQueryActions send the advanced query `aq` and `groupBy` parameters to the headless engine
-      const payloadDispatchableAction = advancedSearchQueryActionCreators.updateAdvancedSearchQueries({
-        "aq": advancedQuery,
-        "groupBy": [
-          {
-            "field": "@year",
-            "sortCriteria": "occurrences",
-          }
-        ],
-      });
-
-      // The static filter selection user clicks on the filter button to filter for 2022 content
-      const dispatchableLogFilterSelectAction = searchAnalyticsActionCreators.logStaticFilterSelect({
-        staticFilterId:"year",
-        staticFilterValue:{
-          caption: "Filter content for 2022",
-          expression: advancedQuery,
-          }
-      });
-
-      // Creating actions that executes a search query from the static filter.
-      const dispatchableSearchAction = searchActionCreators.executeSearch(dispatchableLogFilterSelectAction);   
-      
-      //The event to log when a search interface loads for the first time.
-      const dispatchableLogInterfaceLoad = searchAnalyticsActionCreators.logInterfaceLoad();
-      //The event to log when the results sort criterion is changed
-      const dispatchableLogSortChange = searchAnalyticsActionCreators.logResultsSort();
-      //The event to log when a user provides negative feedback for a given smart snippet answer
-      const dispatchableLogDislikeSmartSnippet = searchAnalyticsActionCreators.logDislikeSmartSnippet();
-      //The event to log when a static filter value is selected.
-      const dispatchableLogStaticFilterSelect = searchAnalyticsActionCreators.logStaticFilterSelect({
-        staticFilterId:"year",
-        staticFilterValue:{
-          caption: "Filter content for 2022",
-          expression: advancedQuery,
-          }
-      });
-
-   
-
-       // dispatching the actions
-      headlessEngine.dispatch(payloadDispatchableAction);
-      headlessEngine.dispatch(dispatchableSearchAction);
-      headlessEngine.dispatch(dispatchableLogSortChange);
-      headlessEngine.dispatch(dispatchableLogDislikeSmartSnippet);
-      headlessEngine.dispatch(dispatchableLogStaticFilterSelect);
-      headlessEngine.dispatch(dispatchableLogInterfaceLoad);
-    }
-
-  </script>
-  <style>
-    /* Example on how to customize the color facet */
-    atomic-color-facet::part(value-dynamicscrmitem) {
-      background-image: url('/build/assets/email.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: rgb(149, 174, 197);
-    }
-
-    atomic-color-facet::part(value-lithiumuser) {
-      background-image: url('/build/assets/folder.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: rgb(139, 154, 227);
-    }
-
-    atomic-color-facet::part(value-YouTubeVideo) {
-      background-image: url('build/assets/video.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: rgb(176, 112, 230);
-    }
-
-    atomic-color-facet::part(value-lithiummessage) {
-      background-image: url('build/assets/knowledge.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: rgb(236, 148, 237);
-    }
-
-    atomic-color-facet::part(value-lithiumthread) {
-      background-image: url('build/assets/post.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-image: rgb(101, 202, 228);
-    }
-
-    atomic-color-facet::part(value-html) {
-      background-image: url('build/assets/html.svg');
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: transparent;
-    }
-  </style>
-  <style>
-    /* Example of generic layout styling, mobile-first  */
-    :root {
-      --spacing: 16px;
-      --spacing-col: 32px;
-      --search-box-width: 648px;
-    }
-
-    body {
-      margin: 0;
-    }
-
-    body.atomic-modal-opened {
-      overflow-y: hidden;
-    }
-
-    atomic-search-interface {
-      display: grid;
-      grid-template-columns: var(--spacing) 1fr var(--spacing);
-      grid-template-areas:
-        '. search      .'
-        '. status      .'
-        '. breadbox    .'
-        '. topbar      .'
-        '. results     .'
-        '. pagination  .'
-        '. .           .';
-    }
-
-    .header-bg {
-      background-color: var(--atomic-neutral-light);
-      grid-area: 1 / -1 / 1 / 1;
-    }
-
-    atomic-facet-manager {
-      display: none;
-    }
-
-    atomic-sort-dropdown {
-      display: none;
-    }
-
-    atomic-search-box {
-      grid-area: search;
-      margin: var(--spacing) 0;
-      max-width: var(--search-box-width);
-    }
-
-    .status {
-      grid-area: status;
-    }
-
-    atomic-facet-manager {
-      grid-area: facets;
-      margin-top: var(--spacing);
-    }
-
-    atomic-facet-manager>* {
-      margin-bottom: var(--spacing);
-    }
-
-    atomic-breadbox {
-      grid-area: breadbox;
-      margin-top: var(--spacing);
-      padding-bottom: var(--spacing);
-      border-bottom: 1px solid var(--atomic-neutral);
-    }
-
-    .topbar {
-      grid-area: topbar;
-      margin: var(--spacing) 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    atomic-did-you-mean {
-      margin-bottom: var(--spacing);
-    }
-
-    .results {
-      grid-area: results;
-    }
-
-    .pagination {
-      grid-area: pagination;
-      margin: var(--spacing) 0;
-    }
-
-    .atomic-search-interface-no-results .topbar,
-    .atomic-search-interface-no-results .results,
-    .atomic-search-interface-no-results .pagination {
-      display: none;
-    }
-
-    @media only screen and (min-width: 1024px) {
-      atomic-search-interface {
-        column-gap: var(--spacing-col);
-        grid-template-columns: 1fr minmax(150px, 325px) minmax(500px, 1100px) 1fr;
-        grid-template-areas:
-          '. .      search      .'
-          '. facets breadbox    .'
-          '. facets topbar      .'
-          '. facets results     .'
-          '. facets pagination  .'
-          '. facets status      .'
-          '. facets .           .';
-      }
-
-      atomic-facet-manager {
-        display: block;
-      }
-
-      atomic-refine-toggle {
-        display: none;
-      }
-
-      atomic-sort-dropdown {
-        display: block;
-      }
-
-      .status {
-        max-width: var(--search-box-width);
-      }
-
-      .this-year-button {
-        width: fit-content;
-        padding: 10px 10px 12px 10px;
-        border: 1px solid #1372ec;
-        border-radius: 10px;
-        font-family: var(--atomic-font-family);
-        position: absolute;
-        margin: var(--spacing);
-        right: 0;
-        cursor: pointer;
-        user-select: none;
-        
-      }
-
-      .this-year-button:hover {
-        background: #e1e9f3;
-      }
-
-      .this-year-button.active {
-        background: #066bf0;
-        color: white;
-      }
-    }
-
-    /* The styling I had to handle for the filter button to show on all screens  */
-    @media only screen and (max-width:1014px) {
-    .this-year-button {
-      border: 1px solid #1372ec;
-      border-radius: 10px;
-      margin: 10px 10px 10px -100px; /* negative margin to move the button to the left */
-      text-align: center; 
-      padding: 10px; 
-      user-select: none;
-    }
-
-    .this-year-button:hover {
-      background: #e1e9f3;
-      }
-
-    .this-year-button.active {
-        background: #066bf0;
-        color: white;
-      }
-
-  }
-
-  </style>
+  
+  <!-- moved the js and css to separate files -->
+  <script type="module" src="assets/js/main.js" defer> </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
@@ -349,11 +40,8 @@
       </atomic-rating-range-facet>
       <atomic-color-facet field="filetype" label="Files" number-of-values="6" sort-criteria="occurrences"></atomic-color-facet>
       
-      <!-- building a facet for date so i can filter for 2022 content -->
+      <!-- building a facet for date so i can use to test for the filter for 2022 content -->
       <atomic-facet field="year" label="Year" ></atomic-facet>
-
-      <!-- <atomic-timeframe-facet label="Timeframe" with-date-picker="true" max="31/12/2022" min="01/01/2022" > 
-      </atomic-timeframe-facet> -->
 
     </atomic-facet-manager>
     <atomic-breadbox></atomic-breadbox>
@@ -373,32 +61,50 @@
         <atomic-result-template must-match-sourcetype="YouTube">
                 <template>
                   <style>
-                    /*** from the documentation I read, "...the section helps create template that works well on desktop and mobile, there was
-                      hardly the need for to me to add any media query for mobile responsiveness as it was already responsive when i tested"
-                     ***/
                   
                     .field-label {
                       font-weight: bold;
                       margin-right: 0.25rem;
                     }
 
-                    /* Flexbox layout for the excerpt section to display the text and the image thumbnail */
-                    .excerpt-result-section {
-                          display: flex;
-                        }
 
-                    .excerpt-text {
-                        flex: 8; /* Take 80% of the space */
-                        margin-right: 0.95rem;
-                        
+                    .desktop-title-excerpt-style {
+                      display: inline-grid;
+                      margin-top: 3rem;
+                      margin-left : -9rem;
+                      background-color: rgba(221, 221, 221, 0.11);
+                      gap: 1rem;
                     }
 
+                    .title-text {
+                        margin-top: -7.25rem;
+                        height: fit-content;
+                        grid-column: 1; /*To start the title on the first column */
+                        margin-right : 2.95rem;
+                    }  
+                    .excerpt-text {
+                        grid-column: 2;    /*To start the excerpt on the second column */
+                    }                                      
                   .excerpt-image {
-                      flex: 2; /* Take the remaining 20% of the space */
-                      height: 100%; 
-                      width: 100%;
-                      object-fit: contain;
+                        object-fit: contain;
+                        grid-column: 3 ;
+                        grid-row: 1 / span 2;  /*To span the image over two rows */                 
                   }
+
+                  .mobile{
+                    display: none;
+                  }
+
+                    @media only screen and (max-width:920px) {
+                    .desktop-title-excerpt-style {
+                      display: none;
+                    }
+
+                    .mobile{
+                      display: block;
+                    }
+
+                }
 
                     #featured-result::part(result-badge-element) {
                       background-color:black;
@@ -415,13 +121,13 @@
                       color: rgb(5, 1, 1);
                       font-weight: 500;
                     }
+
                 </style>
 
-                    <!-- ** The Visual Result Section -- this gives the video icon ** -->
-                    <atomic-result-section-visual>
+                    <!-- ** The Visual Result Section -- this gives the video icon (personal notes) ** -->
+                    <atomic-result-section-visual class="mobile">
                         <atomic-result-icon></atomic-result-icon> 
                     </atomic-result-section-visual>
-
 
                     <!-- ** The Badge Result Section ** -->
                     <atomic-result-section-badges>
@@ -437,20 +143,22 @@
                               <atomic-result-date id="date-result" ></atomic-result-date>
                             </atomic-field-condition>
                     </atomic-result-section-actions>
+ 
+                    <!-- ** The Emphasized Result Section - only showned on mobile for the thumnail adjustments** -->
+                    <atomic-result-section-emphasized class="mobile">
+                        <atomic-result-image class="excerpt-image" field="ytthumbnailurl"></atomic-result-image> 
+                    </atomic-result-section-emphasized>
 
-                     <!-- ** The Result Title Section ** -->
-                  <atomic-result-section-title>
-                    <atomic-result-link target="_blank"></atomic-result-link>
-                  </atomic-result-section-title>
+                        <!-- ** The Result Title Section ** -->
+                      <atomic-result-section-title class="mobile">
+                        <atomic-result-link target="_blank"></atomic-result-link>
+                      </atomic-result-section-title>
 
-                  <!-- ** Excerpt Result Section - styled to contain the excerpt and image thumbnail as per question** -->
-                      <atomic-result-section-excerpt>
-                          <div class="excerpt-result-section">
-                            <atomic-result-text field="excerpt" class="excerpt-text"></atomic-result-text>
-                            <atomic-result-image class="excerpt-image" field="ytthumbnailurl"></atomic-result-image>                            
-                          </div>
-                      </atomic-result-section-excerpt> 
-
+                      <!-- ** Excerpt Result Section - styled to contain the excerpt and image thumbnail as per question** -->
+                          <atomic-result-section-excerpt >
+                                <atomic-result-text field="excerpt" class="mobile"></atomic-result-text>
+                          </atomic-result-section-excerpt> 
+                   
                     <!-- ** The Bottom Metadata Result Section ** -->
                         <atomic-result-section-bottom-metadata>
                             <atomic-result-fields-list> 
@@ -465,6 +173,18 @@
                             </atomic-result-fields-list>
                         </atomic-result-section-bottom-metadata>
 
+
+                        <!-- ** The Title and Excerpt Container - this is the main container for the title and excerpt ** -->
+                    <div class="desktop-title-excerpt-style">
+                      <atomic-result-section-title class=" title-text">
+                        <atomic-result-link target="_blank"></atomic-result-link>
+                      </atomic-result-section-title>
+                      <atomic-result-section-excerpt>
+                            <atomic-result-text field="excerpt" class="excerpt-text"></atomic-result-text>
+                      </atomic-result-section-excerpt> 
+
+                      <atomic-result-image class="excerpt-image" field="ytthumbnailurl"></atomic-result-image> 
+                    </div>                        
                   
                 </template>
         </atomic-result-template>

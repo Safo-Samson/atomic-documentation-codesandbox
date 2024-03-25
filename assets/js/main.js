@@ -2,9 +2,6 @@ import {
   loadAdvancedSearchQueryActions,
   loadSearchActions,
   loadSearchAnalyticsActions,
-  buildStaticFilter,
-  buildStaticFilterValue,
-  buildQueryExpression,
 } from "https://static.cloud.coveo.com/atomic/v2/headless/headless.esm.js";
 
 let headlessEngine;
@@ -31,36 +28,66 @@ function filterFor2022(e) {
   // TODO: Task #2
 
   //building a query expression using advanced query
-  const queryExpression = buildQueryExpression()
-    .addStringField({
-      field: "year",
-      operator: "isExactly",
-      values: ["2022"],
-    })
-    .toQuerySyntax();
-
-  //building a query expression using advanced query
   const advancedQuery = "@year==2022";
 
-  //building the static filter value for the static filter
-  const staticFilterValue = buildStaticFilterValue({
-    caption: "Content for 2022", //caption for the static filter value
-    expression: queryExpression,
-  });
-
-  const staticFilter = buildStaticFilter(headlessEngine, {
-    id: "year", // id for static filter props, eg fileType
-    values: [staticFilterValue], //needs a static filter value  StaticFilterValue[]
-  });
-
-  staticFilter.toggleSelect("2022");
-
-  // using the loadAdvancedSearchQueryActions to add the static filter to the search interface
+  // loading all the actions needed to execute the search and log the events using the headless engine
   const advancedSearchQueryActionCreators =
     loadAdvancedSearchQueryActions(headlessEngine);
+  const searchActionCreators = loadSearchActions(headlessEngine);
+  const searchAnalyticsActionCreators =
+    loadSearchAnalyticsActions(headlessEngine);
+
+  // using the loadAdvancedSearchQueryActions send the advanced query `aq` and `groupBy` parameters to the headless engine
   const payloadDispatchableAction =
-    advancedSearchQueryActionCreators.updateAdvancedSearchQueries(
-      advancedQuery
-    );
+    advancedSearchQueryActionCreators.updateAdvancedSearchQueries({
+      aq: advancedQuery,
+      groupBy: [
+        {
+          field: "@year",
+          sortCriteria: "occurrences",
+        },
+      ],
+    });
+
+  // The static filter selection user clicks on the filter button to filter for 2022 content
+  const dispatchableLogFilterSelectAction =
+    searchAnalyticsActionCreators.logStaticFilterSelect({
+      staticFilterId: "year",
+      staticFilterValue: {
+        caption: "Filter content for 2022",
+        expression: advancedQuery,
+      },
+    });
+
+  // Creating actions that executes a search query from the static filter.
+  const dispatchableSearchAction = searchActionCreators.executeSearch(
+    dispatchableLogFilterSelectAction
+  );
+
+  //The event to log when a search interface loads for the first time.
+  const dispatchableLogInterfaceLoad =
+    searchAnalyticsActionCreators.logInterfaceLoad();
+  //The event to log when the results sort criterion is changed
+  const dispatchableLogSortChange =
+    searchAnalyticsActionCreators.logResultsSort();
+  //The event to log when a user provides negative feedback for a given smart snippet answer
+  const dispatchableLogDislikeSmartSnippet =
+    searchAnalyticsActionCreators.logDislikeSmartSnippet();
+  //The event to log when a static filter value is selected.
+  const dispatchableLogStaticFilterSelect =
+    searchAnalyticsActionCreators.logStaticFilterSelect({
+      staticFilterId: "year",
+      staticFilterValue: {
+        caption: "Filter content for 2022",
+        expression: advancedQuery,
+      },
+    });
+
+  // dispatching the actions
   headlessEngine.dispatch(payloadDispatchableAction);
+  headlessEngine.dispatch(dispatchableSearchAction);
+  headlessEngine.dispatch(dispatchableLogSortChange);
+  headlessEngine.dispatch(dispatchableLogDislikeSmartSnippet);
+  headlessEngine.dispatch(dispatchableLogStaticFilterSelect);
+  headlessEngine.dispatch(dispatchableLogInterfaceLoad);
 }
