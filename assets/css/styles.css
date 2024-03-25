@@ -178,12 +178,11 @@
         border: 1px solid #1372ec;
         border-radius: 10px;
         font-family: var(--atomic-font-family);
-        position: absolute;
+        position: static;
         margin: var(--spacing);
         right: 0;
         cursor: pointer;
         user-select: none;
-        
       }
 
       .this-year-button:hover {
@@ -205,15 +204,8 @@
       text-align: center; 
       padding: 10px; 
       user-select: none;
+      position: relative; /* to make the button stay in its normal position */
+
     }
-
-    .this-year-button:hover {
-      background: #e1e9f3;
-      }
-
-    .this-year-button.active {
-        background: #066bf0;
-        color: white;
-      }
 
   }
