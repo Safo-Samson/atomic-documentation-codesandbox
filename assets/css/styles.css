@@ -183,6 +183,7 @@
         right: 0;
         cursor: pointer;
         user-select: none;
+        position: absolute;
       }
 
       .this-year-button:hover {
