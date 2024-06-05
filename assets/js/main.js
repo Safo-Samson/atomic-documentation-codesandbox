@@ -41,10 +41,10 @@ function filterFor2022(e) {
   const payloadDispatchableAction =
     advancedSearchQueryActionCreators.updateAdvancedSearchQueries({
       aq: advancedQuery,
-      groupBy: [
+      groupBy: [ //not really necessary as it adds no value to the query
         {
           field: "@year",
-          sortCriteria: "occurrences",
+          sortCriteria: "occurrences", 
         },
       ],
     });
